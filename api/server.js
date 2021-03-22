@@ -1,6 +1,10 @@
 const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
+const session = require('express-session');
+
+const authRouter = require('./auth/auth-router');
+const usersRouter = require('./users/users-router');
 
 /**
   Do what needs to be done to support sessions with the `express-session` package!
@@ -21,8 +25,24 @@ server.use(helmet());
 server.use(express.json());
 server.use(cors());
 
+server.use(session({
+  name: 'chocolatechip',
+  secret: 'keep your hands out of the cookie jar',
+  cookie: {
+    maxAge: 1000 * 10 * 10,
+    // these two would be changed during production
+    secure: false,
+    httpOnly: false
+  },
+  resave: false,
+  saveUninitialized: false
+}));
+
+server.use('/api/auth', authRouter);
+server.use('/api/users', usersRouter);
+
 server.get("/", (req, res) => {
-  res.json({ api: "up" });
+  res.json({ api: "im working 😁" });
 });
 
 server.use((err, req, res, next) => { // eslint-disable-line
