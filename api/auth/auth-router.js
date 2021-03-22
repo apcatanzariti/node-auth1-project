@@ -98,6 +98,20 @@ const { checkUsernameFree, checkPasswordLength, checkUsernameExists } = require(
   }
  */
 
+router.get('/logout', (req, res) => {
+  if (req.session && req.session.user) {
+    req.session.destroy(err => {
+      if (err) {
+        res.json('you cannot leave!');
+      } else {
+        res.status(200).json('logged out');
+      }
+    })
+  } else {
+    res.status(200).json({ message: 'no session' });
+  }
+});
+
  
 // Don't forget to add the router to the `exports` object so it can be required in other modules
 

@@ -1,5 +1,6 @@
 const express = require('express');
 const { find } = require('./users-model');
+const { restricted } = require('./../auth/auth-middleware');
 
 const router = express.Router();
 
@@ -29,7 +30,7 @@ const router = express.Router();
   }
  */
 
-router.get('/', (req, res) => {
+router.get('/', restricted, (req, res) => {
   find()
   .then(users => {
     res.status(200).json(users);
